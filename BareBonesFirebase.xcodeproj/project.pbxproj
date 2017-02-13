@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4CBEA1754E8D22F42F96EE7A /* Pods_BareBonesFirebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CBBBE94F2A9794BF8ACD0A1 /* Pods_BareBonesFirebase.framework */; };
+		9C485A841E525E9F0077CB55 /* APIRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C485A831E525E9F0077CB55 /* APIRequestManager.swift */; };
 		9C4B97D41E52161A0087589A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C4B97D31E52161A0087589A /* AppDelegate.swift */; };
 		9C4B97D91E52161A0087589A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C4B97D71E52161A0087589A /* Main.storyboard */; };
 		9C4B97DB1E52161A0087589A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C4B97DA1E52161A0087589A /* Assets.xcassets */; };
@@ -21,6 +22,7 @@
 
 /* Begin PBXFileReference section */
 		46F1870DB934AF9C9BBF7E55 /* Pods-BareBonesFirebase.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BareBonesFirebase.release.xcconfig"; path = "Pods/Target Support Files/Pods-BareBonesFirebase/Pods-BareBonesFirebase.release.xcconfig"; sourceTree = "<group>"; };
+		9C485A831E525E9F0077CB55 /* APIRequestManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIRequestManager.swift; sourceTree = "<group>"; };
 		9C4B97D01E52161A0087589A /* BareBonesFirebase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BareBonesFirebase.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C4B97D31E52161A0087589A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9C4B97D81E52161A0087589A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -65,6 +67,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		9C485A851E525EA40077CB55 /* APIRequestManager */ = {
+			isa = PBXGroup;
+			children = (
+				9C485A831E525E9F0077CB55 /* APIRequestManager.swift */,
+			);
+			name = APIRequestManager;
+			sourceTree = "<group>";
+		};
 		9C4B97C71E52161A0087589A = {
 			isa = PBXGroup;
 			children = (
@@ -87,6 +97,7 @@
 			isa = PBXGroup;
 			children = (
 				9C4B97D31E52161A0087589A /* AppDelegate.swift */,
+				9C485A851E525EA40077CB55 /* APIRequestManager */,
 				9C4B97F21E521B000087589A /* Model */,
 				9C4B97EB1E5217C70087589A /* VC */,
 				9C4B97EC1E5217CC0087589A /* UI */,
@@ -257,6 +268,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C485A841E525E9F0077CB55 /* APIRequestManager.swift in Sources */,
 				9C4B97D41E52161A0087589A /* AppDelegate.swift in Sources */,
 				9C4B97EA1E5217BA0087589A /* LinkTableViewController.swift in Sources */,
 				9C4B97EF1E5219410087589A /* LinkTableViewCell.swift in Sources */,

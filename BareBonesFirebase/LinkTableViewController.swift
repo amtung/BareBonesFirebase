@@ -8,6 +8,7 @@
 
 import UIKit
 import FirebaseDatabase
+import FirebaseStorage
 
 class LinkTableViewController: UITableViewController {
     
@@ -18,6 +19,9 @@ class LinkTableViewController: UITableViewController {
         super.viewDidLoad()
         
         self.databaseReference = FIRDatabase.database().reference().child("links")
+//        getLinks()
+        tableView.estimatedRowHeight = 200
+        tableView.rowHeight = UITableViewAutomaticDimension
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -26,8 +30,16 @@ class LinkTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        getLinks()
+    }
+    
     func getLinks() {
         databaseReference.observeSingleEvent(of: .value, with: { (snapshot) in
+            
+            var newLinks = [Link]()
+            
             for child in snapshot.children {
                 dump(child)
                 
@@ -37,10 +49,11 @@ class LinkTableViewController: UITableViewController {
                     let link = Link(key: snap.key,
                                     url: valueDict["url"] ?? "",
                                     comment: valueDict["comment"] ?? "")
-                    // we construct the arr the populate tableview w. data that came back from firebase
-                    self.links.append(link)
+                    // we construct the arr then populate tableview w. data that came back from firebase
+                    newLinks.append(link)
                 }
             }
+            self.links = newLinks
             self.tableView.reloadData()
         })
     }
@@ -58,9 +71,26 @@ class LinkTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "linkCell", for: indexPath) as! LinkTableViewCell
         
-        cell.linkLabel.text = links[indexPath.row].url
-        cell.commentLabel.text = links[indexPath.row].comment
+        let link = links[indexPath.row]
+        cell.linkLabel.text = link.url
+        cell.commentLabel.text = link.comment
         
+        let storage = FIRStorage.storage()
+        // create a storage ref from our storage servie
+        let storageRef = storage.reference() // (forURL: "gs://barebonesfirebase-bed15.appspot.com")
+        let spaceRef = storageRef.child("images/\(link.key)")
+        spaceRef.data(withMaxSize: 1 * 1024 * 1024) { (data, error) in
+            if let error = error {
+                print(error)
+            }
+            else {
+                // data for "images/island.jpg" is returned
+                if let data = data {
+                    let image = UIImage(data: data)
+                    cell.linkImageView.image = image
+                }
+            }
+        }
         return cell
     }
     

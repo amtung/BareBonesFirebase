@@ -9,9 +9,10 @@
 import UIKit
 import FirebaseAuth
 import FirebaseDatabase
+import FirebaseStorage
 
 class ShareLinkViewController: UIViewController {
-
+    
     @IBOutlet weak var linkTextField: UITextField!
     @IBOutlet weak var commentTextView: UITextView!
     var databaseReference: FIRDatabaseReference!
@@ -36,18 +37,44 @@ class ShareLinkViewController: UIViewController {
     }
     
     func shareToFirebase() {
-        let linkRef = databaseReference.childByAutoId()
-        let link = Link(key: linkRef.key, url: self.linkTextField.text!, comment: self.commentTextView.text)
-        let dict = link.asDictionary
-        
-        linkRef.setValue(dict) { (error, reference) in
+        APIRequestManager.manager.getData(endPoint: self.linkTextField.text!) { (data) in
             
-            if let error = error {
-                print("Sharing to firebase error: \(error)")
+            let linkRef = self.databaseReference.childByAutoId()
+            if let validData = data,
+                let image = UIImage(data: validData) {
+                let storage = FIRStorage.storage()
+                let storageRef = storage.reference(forURL: "gs://barebonesfirebase-bed15.appspot.com")
+                let spaceRef = storageRef.child("images/\(linkRef.key)")
+                
+                // downsize the image by compressing it
+                let jpeg = UIImageJPEGRepresentation(image, 0.7)
+                
+                let metadata = FIRStorageMetadata()
+                metadata.cacheControl = "public,max-age=300";
+                metadata.contentType = "image/jpeg";
+                
+                let _ = spaceRef.put(jpeg!, metadata: metadata) { (metadata, error) in
+                    guard metadata != nil else {
+                        print("put error")
+                        return
+                    }
+                    // Metadata contains file metadata such as size, content-type, and download URL.
+                    //let downloadURL = metadata.downloadURL
+                }
             }
-            else {
-                print(reference)
-                self.dismiss(animated: true, completion: nil)
+            
+            let link = Link(key: linkRef.key, url: self.linkTextField.text!, comment: self.commentTextView.text)
+            let dict = link.asDictionary
+            
+            // put in the database
+            linkRef.setValue(dict) { (error, reference) in
+                if let error = error {
+                    print(error)
+                }
+                else {
+                    print(reference)
+                    self.dismiss(animated: true, completion: nil)
+                }
             }
         }
     }
